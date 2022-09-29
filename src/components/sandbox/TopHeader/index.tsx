@@ -5,6 +5,8 @@ import {
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import {Layout} from 'antd'
+import style from './index.module.css'
+import UserShow from "./UserShow";
 const {Header} = Layout
 
 interface TopHeaderProps {
@@ -13,9 +15,10 @@ interface TopHeaderProps {
 }
 function TopHeader({collapsed,setCollapsed}:TopHeaderProps) {
     return (
-        <Header className="site-layout-background" style={{ padding: 0 }}>
-            {collapsed ? <MenuUnfoldOutlined className={'trigger'} onClick={() => setCollapsed(!collapsed)}/> :
-                <MenuFoldOutlined className={'trigger'} onClick={() => setCollapsed(!collapsed)}/>}
+        <Header className="site-layout-background" style={{ padding: 0,display:'flex',justifyContent:"space-between"}}>
+            {collapsed ? <MenuUnfoldOutlined className={style.trigger} onClick={() => setCollapsed(!collapsed)}/> :
+                <MenuFoldOutlined className={style.trigger} onClick={() => setCollapsed(!collapsed)}/>}
+                <div className={style.userShow}><UserShow/></div>
         </Header>
     );
 }
