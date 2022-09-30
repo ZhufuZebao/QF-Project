@@ -3,3 +3,12 @@
     margin: 16px;
     background: rgba(255, 255, 255, 0.3);
 }
+.sideMenu{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+.menuList{
+    flex: 1;
+    overflow: auto;
+}

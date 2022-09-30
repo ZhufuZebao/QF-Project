@@ -6,7 +6,6 @@ import HomePage from "../pages/Home/HomePage";
 import UserListPage from "../pages/userManage/UserList/UserListPage";
 import RoleListPage from "../pages/rightManage/RoleList/RoleListPage";
 import RightListPage from "../pages/rightManage/RightList/RightListPage";
-import index from "@babel/generator";
 function IndexRouter(props:any) {
     const GetRouter = () => {
         const routerMiddle = () => {
