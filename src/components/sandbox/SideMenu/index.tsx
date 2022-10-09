@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate,useLocation} from 'react-router-dom'
-
+import {useDispatch} from 'react-redux'
+import {setRightList} from '../../../redux/reducers/globalReducer'
 import {Layout, Menu} from 'antd'
-
 import {
     UserOutlined,
     ToTopOutlined,
@@ -12,8 +12,7 @@ import {
     HomeOutlined,
 } from '@ant-design/icons';
 import style from './index.module.css'
-import axios from "axios";
-
+import {initialize} from "../../../server/server";
 const {Sider} = Layout
 
 interface SideMenuProps {
@@ -21,39 +20,48 @@ interface SideMenuProps {
 }
 
 function SideMenu({collapsed}: SideMenuProps) {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const {pathname} = useLocation()
     const [getMenuList, setGetMenuList] = useState([])
     useEffect(() => {
-        axios.get('http://localhost:8000/rights?_embed=children').then(res => {
-            let data = formatMenuList(res.data)
-            setGetMenuList(data)
-        })
-    }, [])
-    const formatMenuList = (data: any): any => {
-        let list = []
-        for (let i in data) {
-            if (data[i].pagepermisson) {
-                if (data[i].children && data[i].children.length > 0) {
-                    list.push({
-                        key: data[i].key,
-                        label: data[i].title,
-                        icon: getIcon(data[i].key),
-                        pagepermisson: data[i].pagepermisson,
-                        children: formatMenuList(data[i].children)
-                    })
-                } else {
-                    list.push({
-                        key: data[i].key,
-                        label: data[i].title,
-                        icon: getIcon(data[i].key),
-                        pagepermisson: data[i].pagepermisson,
-                    })
+        const formatMenuList = (data: any): any => {
+            let list = []
+            for (let i in data) {
+                if (data[i].pagepermisson) {
+                    if (data[i].children && data[i].children.length > 0) {
+                        list.push({
+                            key: data[i].key,
+                            label: data[i].title,
+                            icon: getIcon(data[i].key),
+                            pagepermisson: data[i].pagepermisson,
+                            children: formatMenuList(data[i].children)
+                        })
+                    } else {
+                        list.push({
+                            key: data[i].key,
+                            label: data[i].title,
+                            icon: getIcon(data[i].key),
+                            pagepermisson: data[i].pagepermisson,
+                        })
+                    }
                 }
             }
+            return list
         }
-        return list
-    }
+        initialize('/rights?_embed=children').then(res => {
+            let data = formatMenuList(res.data)
+            setGetMenuList(data)
+            let list = res.data
+            list.forEach((item:any) => {
+                if (item.children.length === 0){
+                    item.children = ''
+                }
+            })
+            dispatch(setRightList(list))
+        })
+    }, [dispatch])
+
     const getIcon = (key: string) => {
         switch (key) {
             case '/home':

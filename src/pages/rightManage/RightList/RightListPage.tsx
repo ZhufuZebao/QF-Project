@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Table, Tag,Popover,Switch,Modal} from 'antd'
 import {EditOutlined,DeleteOutlined,ExclamationCircleOutlined} from '@ant-design/icons'
-import {deleteData, initialize, updataData} from "../../../server/server";
+import {deleteData, initialize, updateData} from "../../../server/server";
 import style from './RightListPage.module.css'
 const {confirm} = Modal
 
@@ -23,14 +23,14 @@ function RightListPage(props:any) {
     const changeRight = (item:any) => {
         item.pagepermisson = item.pagepermisson?0:1
         if(item.grade === 1){
-            updataData(`/rights/${item.id}`,{pagepermisson:item.pagepermisson}).then(res => {
+            updateData(`/rights/${item.id}`,{pagepermisson:item.pagepermisson}).then(res => {
                 if(res.status === 200){
                     setDataSource([...dataSource])
                 }
 
             })
         }else{
-            updataData(`/children/${item.id}`,{pagepermisson:item.pagepermisson}).then(res => {
+            updateData(`/children/${item.id}`,{pagepermisson:item.pagepermisson}).then(res => {
                 if(res.status === 200){
                     setDataSource([...dataSource])
                 }
