@@ -1,13 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SideMenu from "../../components/sandbox/SideMenu";
 import TopHeader from "../../components/sandbox/TopHeader";
 import {Outlet} from 'react-router-dom'
 import './NewsSandBox.css'
 
 import {Layout} from 'antd'
+import {initialize} from "../../server/server";
+import {useDispatch} from "react-redux";
+import {setRegionList,setRoleList} from '../../redux/reducers/globalReducer'
 const {Content} = Layout
 
 function NewsSandBox(props:any) {
+    const dispatch =  useDispatch()
+    useEffect(() => {
+        initialize('/regions').then(res => {
+            if(res.status === 200){
+                dispatch(setRegionList(res.data))
+            }
+        })
+        initialize('/roles').then(res => {
+            if(res.status === 200){
+                let data = res.data
+                data.map((item:any) => {
+                    return {id:item.id,roleName:item.roleName,roleType:item.roleType}
+                })
+                dispatch(setRoleList(data))
+            }
+        })
+    },[dispatch])
     const [collapsed, setCollapsed] = useState(false);
     return (
         <Layout>
