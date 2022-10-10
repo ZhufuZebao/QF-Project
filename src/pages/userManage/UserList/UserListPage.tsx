@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Table,Switch,Button,Modal} from 'antd'
+import type { ColumnsType} from 'antd/es/table';
 import {deleteData, initialize, updateData} from "../../../server/server";
 import style from '../../rightManage/RightList/RightListPage.module.css'
 import {DeleteOutlined,ExclamationCircleOutlined,EditOutlined,PlusOutlined} from '@ant-design/icons'
 import Dialog from "./Dialog/Dialog";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../redux/store";
 const {confirm} = Modal
 function UserListPage(props:any) {
     useEffect(() => {
@@ -11,6 +14,8 @@ function UserListPage(props:any) {
             setDataSource(res.data)
         })
     },[])
+    const AppState = useSelector((state:RootState) => state)
+    const {regionList}  = AppState.globalSlice
     const [dataSource,setDataSource] = useState([])
     const [showDialog,setShowDialog] = useState(false)
     const [showEditDialog,setShowEditDialog] = useState(false)
@@ -49,10 +54,23 @@ function UserListPage(props:any) {
         setShowEditDialog(true)
 
     }
-    const columns = [
+    const columns:ColumnsType<any> = [
         {
             dataIndex:'region',
             title:'区域',
+            filters:[
+                ...regionList.map((data:any) => {
+                    return {
+                        text:data.title,
+                        value:data.value
+                    }
+                }),
+                {
+                    text:'全球',
+                    value:''
+                }
+            ],
+            onFilter: (value: any, record:any) => record.region === value,
             render:(region:string) => {
                 return <b>{region === ''?'全球':region}</b>
             }
