@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Table,Switch,Button,Modal} from 'antd'
-import {initialize} from "../../../server/server";
+import {deleteData, initialize, updateData} from "../../../server/server";
 import style from '../../rightManage/RightList/RightListPage.module.css'
 import {DeleteOutlined,ExclamationCircleOutlined,EditOutlined,PlusOutlined} from '@ant-design/icons'
 import Dialog from "./Dialog/Dialog";
@@ -8,21 +8,47 @@ const {confirm} = Modal
 function UserListPage(props:any) {
     useEffect(() => {
         initialize('/users?_expand=role').then(res => {
-            console.log(res.data)
             setDataSource(res.data)
         })
     },[])
     const [dataSource,setDataSource] = useState([])
     const [showDialog,setShowDialog] = useState(false)
+    const [showEditDialog,setShowEditDialog] = useState(false)
+    const [editUserData,setEditUserData] = useState({})
 
     const showPromiseConfirm = (item:any) => {
         confirm({
             title: '确定要删除吗?',
             icon: <ExclamationCircleOutlined />,
-            onOk() {},
+            onOk() {
+                delUser(item)
+            },
             onCancel() {},
         });
     };
+    const delUser = (item:any) => {
+        deleteData(`/users/${item.id}`).then(res => {
+            let newDataSoure = dataSource.filter((data:any) => item.id !== data.id)
+            setDataSource([...newDataSoure])
+        })
+    }
+    const changeUserRoleState = (item:any) => {
+        updateData(`/users/${item.id}`,{roleState:!item.roleState}).then(res => {
+            let newDataSoure = [...dataSource]
+            newDataSoure.map((data:any) => {
+                if(item.id === data.id){
+                    data.roleState = !data.roleState
+                }
+                return data
+            })
+            setDataSource(newDataSoure)
+        })
+    }
+    const editUserInformation = (item:any) => {
+        setEditUserData(item)
+        setShowEditDialog(true)
+
+    }
     const columns = [
         {
             dataIndex:'region',
@@ -46,14 +72,14 @@ function UserListPage(props:any) {
             dataIndex: 'roleState',
             title:'用户状态',
             render:(roleState:any,item:any) => {
-                return <Switch disabled={item.default} checked={roleState}/>
+                return <Switch disabled={item.default} checked={roleState} onChange={() => changeUserRoleState(item)}/>
             }
         },
         {
             title:'操作',
             render: (item:any) => {
                 return <div className={style.operationDiv}>
-                    <Button type="primary" shape="circle" disabled={item.default}  icon={<EditOutlined />} size="large" onClick={() => alert(111)}/>
+                    <Button type="primary" shape="circle" disabled={item.default}  icon={<EditOutlined />} size="large" onClick={() => editUserInformation(item)}/>
                     <div style={{width:'20px'}}></div>
                     <Button type="primary" shape="circle" disabled={item.default} icon={<DeleteOutlined />} size="large"  danger={true} onClick={() => showPromiseConfirm(item)}/>
                 </div>
@@ -66,7 +92,15 @@ function UserListPage(props:any) {
                 添加用户
             </Button>
             <Table dataSource={dataSource} columns={columns} rowKey={(item:any) => item.id} pagination={{pageSize:7}}/>
-            <Dialog open={showDialog} changeOpen={setShowDialog}/>
+            <Dialog open={showDialog}
+                    changeOpen={setShowDialog}
+                    showEditDialog={showEditDialog}
+                    setShowEditDialog={setShowEditDialog}
+                    dataSource={dataSource}
+                    setDataSource={setDataSource}
+                    editUserData={editUserData}
+                    setEditUserData={setEditUserData}
+            />
         </div>
     );
 }
