@@ -9,6 +9,12 @@
     padding: 50px 100px;
     border-radius: 20px;
 }
+.title{
+    font-size: 25px;
+    text-align: center;
+    color: darkred;
+    margin-bottom: 16px;
+}
 :global(.login-form-button){
     width: 100%;
 }

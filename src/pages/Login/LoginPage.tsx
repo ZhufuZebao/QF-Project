@@ -1,15 +1,29 @@
-import React from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import React, {useEffect} from 'react';
+import {Button,Form, Input, message} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import style from './LoginPage.module.css'
+import {loginServer} from "../../server/server";
+import {useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom'
+import {login} from '../../redux/reducers/authReducer'
 
 function LoginPage(props:any) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const onFinish = (values: any) => {
-        console.log('Success:', values);
+        loginServer(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`).then(res => {
+            if(res.data.length > 0){
+                dispatch(login(res.data))
+                navigate('/')
+            }else{
+                message.error('用户名和密码不正确')
+            }
+        })
     };
     return (
         <div style={{height:'100vh',backgroundColor:'#FFFAF0'}}>
             <div className={style.fromDiv}>
+                <div className={style.title}>LOGIN</div>
                 <Form
                     name="normal_login"
                     className="login-form"
@@ -33,13 +47,10 @@ function LoginPage(props:any) {
                         />
                     </Form.Item>
                     <Form.Item>
-                        <Form.Item name="remember" valuePropName="checked" noStyle>
-                            <Checkbox>Remember me</Checkbox>
-                        </Form.Item>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
+                        <Button type="primary" htmlType="submit" className="login-form-button"
+                                style={{backgroundColor:'#CD853F',border:'0px',marginTop:'10px'}}
+                        >
+                            登录
                         </Button>
                     </Form.Item>
                 </Form>

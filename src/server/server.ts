@@ -24,3 +24,6 @@ export function deleteData(url:string) {
 export function insertData(url:string,data:insertDataState){
     return axios.post(`${default_url}${url}`,data)
 }
+export function loginServer(url:string){
+    return axios.get(`${default_url}${url}`)
+}

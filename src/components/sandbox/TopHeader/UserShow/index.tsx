@@ -20,7 +20,7 @@ function UserShow(props:any) {
                 {
                     label: '退出登录',
                     key: '3',
-                    danger:true
+                    danger:true,
                 },
             ]}
         />
