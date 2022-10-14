@@ -17,7 +17,7 @@ const defaultFormData = {
     roleId:''
 }
 
-function FormModule({form,regionDisable,setRegionDisable,editUserData}:FormModuleProps) {
+function FormModule({form,regionDisable,setRegionDisable,editUserData={}}:FormModuleProps) {
     const AppState = useSelector((state:RootState) => state)
     const {regionList,roleList} = AppState.globalSlice
     const {userInfo:{roleId,region}} = AppState.authSlice
@@ -25,7 +25,7 @@ function FormModule({form,regionDisable,setRegionDisable,editUserData}:FormModul
         switch (roleId) {
             case 1: return false
             case 2:
-                if(roleListId > roleId || roleListId === editUserData.roleId){
+                if(roleListId > roleId || roleListId === editUserData?.roleId){
                     return false
                 }
                 return true
