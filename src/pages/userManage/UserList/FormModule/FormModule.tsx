@@ -7,7 +7,7 @@ interface FormModuleProps {
     form:FormInstance<any>,
     regionDisable:boolean,
     setRegionDisable:(data:boolean) => void,
-    editUserData?:object
+    editUserData?:any
 }
 
 const defaultFormData = {
@@ -17,9 +17,32 @@ const defaultFormData = {
     roleId:''
 }
 
-function FormModule({form,regionDisable,setRegionDisable}:FormModuleProps) {
+function FormModule({form,regionDisable,setRegionDisable,editUserData}:FormModuleProps) {
     const AppState = useSelector((state:RootState) => state)
     const {regionList,roleList} = AppState.globalSlice
+    const {userInfo:{roleId,region}} = AppState.authSlice
+    const roleAccess = (roleListId:number) => {
+        switch (roleId) {
+            case 1: return false
+            case 2:
+                if(roleListId > roleId || roleListId === editUserData.roleId){
+                    return false
+                }
+                return true
+            case 3: return true
+        }
+    }
+    const regionAccess = (regionListName:string) => {
+        switch (roleId) {
+            case 1: return false
+            case 2:
+                if(regionListName === region){
+                    return false
+                }
+                return true
+            case 3: return true
+        }
+    }
     return (
         <Form
             form={form}
@@ -59,7 +82,7 @@ function FormModule({form,regionDisable,setRegionDisable}:FormModuleProps) {
             >
                 <Select disabled={regionDisable}>
                     {regionList.map((item:any) => {
-                        return <Option key={item.id} value={item.title}>{item.value}</Option>
+                        return <Option disabled={regionAccess(item.title)} key={item.id} value={item.title}>{item.value}</Option>
                     })}
                 </Select>
             </Form.Item>
@@ -70,7 +93,7 @@ function FormModule({form,regionDisable,setRegionDisable}:FormModuleProps) {
             >
                 <Select>
                     {roleList.map((item:any)  => {
-                        return  <Option key={item.id} value={item.roleType}>{item.roleName}</Option>
+                        return  <Option disabled={roleAccess(item.id)} key={item.id} value={item.roleType}>{item.roleName}</Option>
                     })}
                 </Select>
             </Form.Item>

@@ -1,13 +1,22 @@
 import React from 'react';
 import {Dropdown,Menu,Avatar} from 'antd'
 import { UserOutlined } from '@ant-design/icons';
+import {useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom'
+import {logout} from '../../../../redux/reducers/authReducer'
 
 function UserShow(props:any) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const logoutFunction = () => {
+        dispatch(logout())
+        navigate('/login')
+    }
     const menu = (
-        <Menu
+        <Menu style={{textAlign:'center'}}
             items={[
                 {
-                    label: <a href="https://www.antgroup.com">1st menu item</a>,
+                    label: localStorage.getItem('token'),
                     key: '0',
                 },
                 {
@@ -18,7 +27,7 @@ function UserShow(props:any) {
                     type: 'divider',
                 },
                 {
-                    label: '退出登录',
+                    label: <div onClick={logoutFunction}>退出登录</div>,
                     key: '3',
                     danger:true,
                 },

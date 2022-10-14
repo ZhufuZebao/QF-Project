@@ -9,11 +9,13 @@ const {confirm} = Modal
 
 interface roleRightListData {
     id:number,
-    data:Array<string>
+    data:Array<string>,
+    title:string,
 }
 const defaultRoleRightListData:roleRightListData = {
     id:0,
-    data:[]
+    data:[],
+    title:''
 }
 function RoleListPage(props:any) {
     let appState = useSelector((state:RootState) => state)
@@ -52,7 +54,7 @@ function RoleListPage(props:any) {
         }
     ]
     const showRightModule = (item:any) => {
-        setRoleRightList({id:item.id,data:item.rights})
+        setRoleRightList({id:item.id,data:item.rights,title:item.roleName})
         setModalOpen(true)
     }
     const showPromiseConfirm = (item:any) => {
@@ -96,13 +98,14 @@ function RoleListPage(props:any) {
     return (
         <>
             <Table dataSource={dataSource} columns={columns} rowKey={(item:any) => item.id}/>
-            <Modal title="Basic Modal" open={isModalOpen} onOk={submitRight} onCancel={handleCancel}>
+            <Modal title={roleRightList.title} open={isModalOpen} onOk={submitRight} onCancel={handleCancel}>
                 <Tree
                     checkable
                     checkedKeys={roleRightList.data}
                     // @ts-ignore
-                    onCheck={(item) => setRoleRightList({...roleRightList,data:item})}
+                    onCheck={(item) => setRoleRightList({...roleRightList,data:item.checked})}
                     treeData={rightList}
+                    checkStrictly={true}
                 />
             </Modal>
         </>

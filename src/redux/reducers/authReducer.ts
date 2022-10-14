@@ -11,7 +11,7 @@ const defauleUserInfo:userInfoInterface = {
         id:0,
         roleName:'',
         roleType:0,
-        rights:[]
+        rights:[],
     },
 }
 
@@ -48,9 +48,10 @@ const authReducer = createSlice({
         },
         logout(state:State){
             localStorage.removeItem('token')
-            state.userInfo = defauleUserInfo
+            localStorage.removeItem('persist:root')
+            state = initialState
         }
     }
 })
-export const {login} = authReducer.actions
+export const {login,logout} = authReducer.actions
 export default authReducer.reducer

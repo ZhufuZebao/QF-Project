@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate,useLocation} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {setRightList} from '../../../redux/reducers/globalReducer'
 import {Layout, Menu} from 'antd'
 import {
@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons';
 import style from './index.module.css'
 import {initialize} from "../../../server/server";
+import {RootState} from "../../../redux/store";
 const {Sider} = Layout
 
 interface SideMenuProps {
@@ -20,6 +21,7 @@ interface SideMenuProps {
 }
 
 function SideMenu({collapsed}: SideMenuProps) {
+    const {userInfo:{role:{rights}}} = useSelector((state:RootState) => state.authSlice)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {pathname} = useLocation()
@@ -28,7 +30,7 @@ function SideMenu({collapsed}: SideMenuProps) {
         const formatMenuList = (data: any): any => {
             let list = []
             for (let i in data) {
-                if (data[i].pagepermisson) {
+                if (data[i].pagepermisson && rights.includes(data[i].key)) {
                     if (data[i].children && data[i].children.length > 0) {
                         list.push({
                             key: data[i].key,

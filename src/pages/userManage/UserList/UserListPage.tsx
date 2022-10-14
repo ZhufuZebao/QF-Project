@@ -11,11 +11,22 @@ const {confirm} = Modal
 function UserListPage(props:any) {
     useEffect(() => {
         initialize('/users?_expand=role').then(res => {
-            setDataSource(res.data)
+            let data = [...res.data]
+            let myData = data.filter((item:any) => item.id === id)
+            let myAccess = []
+            if(roleId === 1){
+                myAccess = data.filter((item:any) => item.id !== id)
+            }else{
+                myAccess = data.filter((item:any) => item.region === region && item.roleId >= roleId && item.id !== id)
+            }
+            console.log(myData,myAccess,[...myData,...myAccess])
+            // @ts-ignore
+            setDataSource([...myData,...myAccess])
         })
     },[])
     const AppState = useSelector((state:RootState) => state)
     const {regionList}  = AppState.globalSlice
+    const {userInfo:{id,roleId,region}} = AppState.authSlice
     const [dataSource,setDataSource] = useState([])
     const [showDialog,setShowDialog] = useState(false)
     const [showEditDialog,setShowEditDialog] = useState(false)
@@ -54,6 +65,16 @@ function UserListPage(props:any) {
         setShowEditDialog(true)
 
     }
+    const disableAccess = (noAccess:boolean,item:any) => {
+        if(noAccess) return true
+        switch (roleId) {
+            case 1: return false
+            case 2:
+                if(item.id > roleId) return false
+                return true
+            case 3: return true
+        }
+    }
     const columns:ColumnsType<any> = [
         {
             dataIndex:'region',
@@ -90,16 +111,16 @@ function UserListPage(props:any) {
             dataIndex: 'roleState',
             title:'用户状态',
             render:(roleState:any,item:any) => {
-                return <Switch disabled={item.default} checked={roleState} onChange={() => changeUserRoleState(item)}/>
+                return <Switch disabled={disableAccess(item.default,item)} checked={roleState} onChange={() => changeUserRoleState(item)}/>
             }
         },
         {
             title:'操作',
             render: (item:any) => {
                 return <div className={style.operationDiv}>
-                    <Button type="primary" shape="circle" disabled={item.default}  icon={<EditOutlined />} size="large" onClick={() => editUserInformation(item)}/>
+                    <Button type="primary" shape="circle" disabled={disableAccess(item.default,item)}  icon={<EditOutlined />} size="large" onClick={() => editUserInformation(item)}/>
                     <div style={{width:'20px'}}></div>
-                    <Button type="primary" shape="circle" disabled={item.default} icon={<DeleteOutlined />} size="large"  danger={true} onClick={() => showPromiseConfirm(item)}/>
+                    <Button type="primary" shape="circle" disabled={disableAccess(item.default,item)} icon={<DeleteOutlined />} size="large"  danger={true} onClick={() => showPromiseConfirm(item)}/>
                 </div>
             }
         },
