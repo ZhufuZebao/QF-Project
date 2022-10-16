@@ -19,7 +19,6 @@ function UserListPage(props:any) {
             }else{
                 myAccess = data.filter((item:any) => item.region === region && item.roleId >= roleId && item.id !== id)
             }
-            console.log(myData,myAccess,[...myData,...myAccess])
             // @ts-ignore
             setDataSource([...myData,...myAccess])
         })
