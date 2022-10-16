@@ -9,8 +9,25 @@ import RightListPage from "../pages/rightManage/RightList/RightListPage";
 import NotFondPage from "../pages/NotFond/NotFondPage";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
+import {useEffect, useState} from "react";
+import {initialize} from "../server/server";
 function IndexRouter(props:any) {
+    useEffect(() => {
+        Promise.all(
+            [initialize('/children?pagepermisson=1'),initialize('/rights?pagepermisson=1')]
+        ).then(value => {
+            let data:string[] = []
+            value[0].data.forEach((item:any) => {
+                data.push(item.key)
+            })
+            value[1].data.forEach((item:any) => {
+                data.push(item.key)
+            })
+            setState(data)
+        })
+    },[])
     const {userInfo:{role:{rights}}} = useSelector((state:RootState) => state.authSlice)
+    const [state,setState] = useState<string[]>([])
     const routerList = [
         {
             path:'',
@@ -46,7 +63,7 @@ function IndexRouter(props:any) {
                 path:'/',
                 element:routerMiddle(),
                 children: routerList.filter((item) => {
-                        if(item.path === '' || item.path === '*' || rights.includes(item.path)){
+                        if((item.path === '' || item.path === '*' || rights.includes(item.path)) && state.includes(item.path)){
                             return true
                         }
                         return false

@@ -1,8 +1,5 @@
 import axios from "axios";
 
-
-const default_url = 'http://localhost:8000'
-
 interface insertDataState {
     username:string,
     password:string,
@@ -13,17 +10,17 @@ interface insertDataState {
 }
 
 export function initialize(url:string) {
-    return axios.get(`${default_url}${url}`)
+    return axios.get(`${url}`)
 }
 export function updateData(url:string,data:any) {
-    return axios.patch(`${default_url}${url}`,data)
+    return axios.patch(`${url}`,data)
 }
 export function deleteData(url:string) {
-    return axios.delete(`${default_url}${url}`)
+    return axios.delete(`${url}`)
 }
 export function insertData(url:string,data:insertDataState){
-    return axios.post(`${default_url}${url}`,data)
+    return axios.post(`${url}`,data)
 }
 export function loginServer(url:string){
-    return axios.get(`${default_url}${url}`)
+    return axios.get(`${url}`)
 }
