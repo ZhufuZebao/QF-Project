@@ -12,6 +12,7 @@ import {RootState} from "../redux/store";
 import {useEffect, useState} from "react";
 import {initialize} from "../server/server";
 import Loading from "../components/loading";
+import NewsAddPage from "../pages/newsManage/NewsAddPage";
 function IndexRouter(props:any) {
     useEffect(() => {
         Promise.all(
@@ -49,6 +50,10 @@ function IndexRouter(props:any) {
         {
             path:'/right-manage/right/list',
             element:<RightListPage/>
+        },
+        {
+            path:'/news-manage/add',
+            element:<NewsAddPage/>
         },
         {
             path:'*',
