@@ -11,6 +11,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {useEffect, useState} from "react";
 import {initialize} from "../server/server";
+import Loading from "../components/loading";
 function IndexRouter(props:any) {
     useEffect(() => {
         Promise.all(
@@ -62,8 +63,11 @@ function IndexRouter(props:any) {
             {
                 path:'/',
                 element:routerMiddle(),
-                children: routerList.filter((item) => {
-                        if((item.path === '' || item.path === '*' || rights.includes(item.path)) && state.includes(item.path)){
+                children:routerList.filter((item) => {
+                        if(item.path === '' || item.path === '*'){
+                            return true
+                        }
+                        if(rights.includes(item.path) && state.includes(item.path)){
                             return true
                         }
                         return false
@@ -78,7 +82,7 @@ function IndexRouter(props:any) {
     }
 
     return (
-        <GetRouter/>
+        state.length > 0?<GetRouter/>:<Loading/>
     );
 }
 

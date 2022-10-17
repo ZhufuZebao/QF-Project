@@ -4,12 +4,14 @@ interface State {
     rightList:Array<any>
     regionList:Array<any>
     roleList:Array<any>
+    loadingNumber:number
 }
 
 const  initialState:State = {
     rightList:[],
     regionList:[],
-    roleList:[]
+    roleList:[],
+    loadingNumber:0,
 }
 
 const globalReducer = createSlice({
@@ -24,6 +26,12 @@ const globalReducer = createSlice({
         },
         setRoleList(state:State,action:PayloadAction<Array<any>>){
             state.roleList = [...action.payload]
+        },
+        startLoading(state:State){
+            state.loadingNumber++
+        },
+        closeLoading(state:State){
+            state.loadingNumber--
         }
     }
 })

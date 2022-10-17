@@ -4,14 +4,16 @@ import TopHeader from "../../components/sandbox/TopHeader";
 import {Outlet} from 'react-router-dom'
 import './NewsSandBox.css'
 
-import {Layout} from 'antd'
+import {Layout,Spin} from 'antd'
 import {initialize} from "../../server/server";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setRegionList,setRoleList} from '../../redux/reducers/globalReducer'
+import {RootState} from "../../redux/store";
 const {Content} = Layout
 
 function NewsSandBox(props:any) {
     const dispatch =  useDispatch()
+    const {loadingNumber}  = useSelector((state:RootState) => state.globalSlice)
     useEffect(() => {
         initialize('/regions').then(res => {
             if(res.status === 200){
@@ -28,7 +30,15 @@ function NewsSandBox(props:any) {
             }
         })
     },[dispatch])
+    useEffect(() => {
+        if(loadingNumber === 0){
+            setLoading(false)
+        }else{
+            setLoading(true)
+        }
+    },[loadingNumber])
     const [collapsed, setCollapsed] = useState(false);
+    const [loading, setLoading] = useState(false);
     return (
         <Layout>
             <SideMenu collapsed={collapsed}/>
@@ -44,7 +54,9 @@ function NewsSandBox(props:any) {
                         borderRadius:'8px'
                     }}
                 >
-                    <Outlet/>
+                    <Spin spinning={loading} delay={500}>
+                        <Outlet/>
+                    </Spin>
                 </Content>
             </Layout>
         </Layout>
