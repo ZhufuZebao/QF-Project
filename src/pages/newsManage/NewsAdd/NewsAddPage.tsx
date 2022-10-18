@@ -4,8 +4,8 @@ import style from './NewsAddPage.module.css'
 import TitleForm from "./TitleForm/TitleForm";
 import ContentForm from "./ContentForm/ContentForm";
 import {useSelector} from "react-redux";
-import {RootState} from "../../redux/store";
-import {insertData} from "../../server/server";
+import {RootState} from "../../../redux/store";
+import {insertData} from "../../../server/server";
 import {useNavigate} from "react-router-dom";
 const { Step } = Steps;
 

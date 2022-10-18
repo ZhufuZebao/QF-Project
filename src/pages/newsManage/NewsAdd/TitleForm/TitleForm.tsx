@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Form, FormInstance, Input, Select} from 'antd'
-import {initialize} from "../../../server/server";
+import {initialize} from "../../../../server/server";
 const {Option} = Select
 
 interface TitleFormProps {
