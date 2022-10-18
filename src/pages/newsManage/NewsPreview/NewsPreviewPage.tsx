@@ -17,7 +17,7 @@ function NewsPreviewPage() {
             <PageHeader
                 onBack={() => window.history.back()}
                 title={showData.title}
-                subTitle={showData.category.value}
+                subTitle={showData?.category?.value}
             >
                 <Descriptions size="small" column={3}>
                     <Descriptions.Item label="创建者">{showData.author}</Descriptions.Item>
