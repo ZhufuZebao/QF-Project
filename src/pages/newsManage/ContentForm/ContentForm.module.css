@@ -1,0 +1,6 @@
+.editorClassName{
+    border: 1px solid #F1F1F1;
+    padding: 10px;
+    overflow: auto;
+    max-height: 450px;
+}

@@ -1,3 +1,15 @@
 .sitePageHeader{
     border: 1px solid rgb(235, 237, 240);
 }
+.showContent{
+    margin-top: 50px;
+}
+.showButton{
+    text-align: right;
+}
+.showButton button{
+    margin: 10px;
+}
+.notShow{
+    display: none !important;
+}
