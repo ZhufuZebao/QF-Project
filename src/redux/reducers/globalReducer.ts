@@ -32,8 +32,11 @@ const globalReducer = createSlice({
         },
         closeLoading(state:State){
             state.loadingNumber--
+        },
+        clearData(state:State){
+            state = initialState
         }
     }
 })
-export const {setRightList,setRegionList,setRoleList} = globalReducer.actions
+export const {setRightList,setRegionList,setRoleList,clearData} = globalReducer.actions
 export default globalReducer.reducer

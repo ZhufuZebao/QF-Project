@@ -3,11 +3,16 @@ import {Button,Form, Input, message} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import style from './LoginPage.module.css'
 import {loginServer} from "../../server/server";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from 'react-router-dom'
 import {login} from '../../redux/reducers/authReducer'
+import {RootState} from "../../redux/store";
 
 function LoginPage(props:any) {
+    const AppState = useSelector((state:RootState) => state)
+    useEffect(() => {
+        console.log(AppState)
+    },[AppState])
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const onFinish = (values: any) => {

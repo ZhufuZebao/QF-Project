@@ -13,16 +13,21 @@ import {useEffect, useState} from "react";
 import {initialize} from "../server/server";
 import Loading from "../components/loading";
 import NewsAddPage from "../pages/newsManage/NewsAdd/NewsAddPage";
+import NewsDraftPage from "../pages/newsManage/NewsDraft/NewsDraftPage";
+import NewsPreviewPage from "../pages/newsManage/NewsPreview/NewsPreviewPage";
 function IndexRouter(props:any) {
     useEffect(() => {
         Promise.all(
-            [initialize('/children?pagepermisson=1'),initialize('/rights?pagepermisson=1')]
+            [initialize('/children?pagepermisson=1'),initialize('/children?routepermisson=1'),initialize('/rights?pagepermisson=1')]
         ).then(value => {
             let data:string[] = []
             value[0].data.forEach((item:any) => {
                 data.push(item.key)
             })
             value[1].data.forEach((item:any) => {
+                data.push(item.key)
+            })
+            value[2].data.forEach((item:any) => {
                 data.push(item.key)
             })
             setState(data)
@@ -54,6 +59,14 @@ function IndexRouter(props:any) {
         {
             path:'/news-manage/add',
             element:<NewsAddPage/>
+        },
+        {
+            path:'/news-manage/draft',
+            element:<NewsDraftPage/>
+        },
+        {
+            path:'/news-manage/preview/:id',
+            element:<NewsPreviewPage/>
         },
         {
             path:'*',

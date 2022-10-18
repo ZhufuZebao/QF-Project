@@ -4,12 +4,14 @@ import { UserOutlined } from '@ant-design/icons';
 import {useDispatch} from "react-redux";
 import {useNavigate} from 'react-router-dom'
 import {logout} from '../../../../redux/reducers/authReducer'
+import {clearData} from '../../../../redux/reducers/globalReducer'
 
 function UserShow(props:any) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const logoutFunction = () => {
         dispatch(logout())
+        dispatch(clearData())
         navigate('/login')
     }
     const menu = (
