@@ -1,0 +1,8 @@
+.showContent{
+    padding: 24px;
+    height: 600px;
+    overflow: auto;
+}
+:global(.ant-descriptions-item-content){
+    color: revert !important;
+}
