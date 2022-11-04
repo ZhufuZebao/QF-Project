@@ -6,13 +6,23 @@ import ContentForm from "./ContentForm/ContentForm";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/store";
 import {insertData} from "../../../server/server";
-import {useNavigate} from "react-router-dom";
+import {useNavigate,useLocation} from "react-router-dom";
 const { Step } = Steps;
 
 function NewsAddPage() {
+    useEffect(() => {
+        let pathNameList = pathname.split('/')
+        if(pathNameList[2] === 'update'){
+            setIsUpdate(true)
+        }else{
+            setIsUpdate(false)
+        }
+    },[window.location.href])
+    var {pathname} = useLocation()
     const navigate = useNavigate()
     const {userInfo} = useSelector((state:RootState) => state.authSlice)
     const [titleForm] = Form.useForm()
+    const [isUpdate,setIsUpdate] = useState(false)
     const [current,setCurrent] = useState(0)
     const [titleData,setTitleData] = useState({})
     const [content,setContent] = useState("")
@@ -62,7 +72,7 @@ function NewsAddPage() {
     return (
         <div>
             <PageHeader
-                title="撰写新闻"
+                title={isUpdate?"修改新闻":"撰写新闻"}
             />
             <Steps current={current}>
                 <Step title="基本信息" description="新闻标题，新闻分类" />

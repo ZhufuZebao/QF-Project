@@ -3,7 +3,7 @@ import {Button, Table,Modal} from 'antd'
 import {EditOutlined,DeleteOutlined,VerticalAlignTopOutlined,ExclamationCircleOutlined} from '@ant-design/icons'
 import {deleteData, initialize} from "../../../server/server";
 import {useSelector} from "react-redux";
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 import {RootState} from "../../../redux/store";
 import style from "../../rightManage/RightList/RightListPage.module.css";
 const {confirm} = Modal
@@ -17,6 +17,7 @@ function NewsDraftPage() {
     },[])
     const {userInfo:{username}} = useSelector((state:RootState) => state.authSlice)
     const [dataSource,setDataSource] = useState([])
+    const navigate = useNavigate()
     const columns = [
         {
             title:'新闻标题',
@@ -40,7 +41,10 @@ function NewsDraftPage() {
             title:'操作',
             render:(item:any) => {
                 return <div className={style.operationDiv}>
-                    <Button shape="circle"  icon={<EditOutlined />} size="large" onClick={() => 111}/>
+                    <Button shape="circle"
+                            icon={<EditOutlined />}
+                            size="large"
+                            onClick={() => navigate(`/news-manage/update/${item.id}`)}/>
                     <div style={{width:'20px'}}></div>
                     <Button shape="circle" icon={<DeleteOutlined />} size="large"  danger={true} onClick={() => showPromiseConfirm(item)}/>
                     <div style={{width:'20px'}}></div>

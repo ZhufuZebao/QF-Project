@@ -15,6 +15,7 @@ import Loading from "../components/loading";
 import NewsAddPage from "../pages/newsManage/NewsAdd/NewsAddPage";
 import NewsDraftPage from "../pages/newsManage/NewsDraft/NewsDraftPage";
 import NewsPreviewPage from "../pages/newsManage/NewsPreview/NewsPreviewPage";
+import NewsUpdatePage from "../pages/newsManage/NewsUpdate/NewsUpdatePage";
 function IndexRouter(props:any) {
     useEffect(() => {
         Promise.all(
@@ -67,6 +68,10 @@ function IndexRouter(props:any) {
         {
             path:'/news-manage/preview/:id',
             element:<NewsPreviewPage/>
+        },
+        {
+          path:'/news-manage/update/:id',
+          element:<NewsAddPage/>
         },
         {
             path:'*',
